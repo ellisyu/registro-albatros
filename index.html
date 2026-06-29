@@ -10,12 +10,18 @@
 
     <div class="container">
         <h2>Registro de Residentes (Base de Datos)</h2>
-        
+
         <form id="registroForm">
             <input type="text" id="nombre" placeholder="Nombres" required>
             <input type="text" id="apellido" placeholder="Apellidos" required>
             <input type="number" id="edad" placeholder="Edad" required>
             <input type="text" id="apartamento" placeholder="N° de Apartamento" required>
+            <select id="status" required>
+                <option value="" disabled selected>Estado</option>
+                <option value="CON VIDA">CON VIDA</option>
+                <option value="DESAPARECIDA">DESAPARECIDA</option>
+                <option value="FALLECIDA">FALLECIDA</option>
+            </select>
             <button type="submit">Registrar Persona</button>
         </form>
 
@@ -27,11 +33,34 @@
                     <th>Apellido</th>
                     <th>Edad</th>
                     <th>Apartamento</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody id="tablaPersonas">
-                </tbody>
+            <tbody id="tablaPersonas"></tbody>
         </table>
+    </div>
+
+    <!-- Modal de edición -->
+    <div id="modalOverlay" class="modal-overlay hidden">
+        <div class="modal">
+            <h3>Editar Persona</h3>
+            <form id="editForm">
+                <input type="text" id="editNombre" placeholder="Nombres" required>
+                <input type="text" id="editApellido" placeholder="Apellidos" required>
+                <input type="number" id="editEdad" placeholder="Edad" required>
+                <input type="text" id="editApartamento" placeholder="N° de Apartamento" required>
+                <select id="editStatus" required>
+                    <option value="CON VIDA">CON VIDA</option>
+                    <option value="DESAPARECIDA">DESAPARECIDA</option>
+                    <option value="FALLECIDA">FALLECIDA</option>
+                </select>
+                <div class="modal-buttons">
+                    <button type="submit">Guardar</button>
+                    <button type="button" id="cancelarEdicion">Cancelar</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script type="module" src="script.js"></script>
