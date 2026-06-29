@@ -19,9 +19,12 @@ const tabla = document.getElementById('tablaPersonas');
 const modalOverlay = document.getElementById('modalOverlay');
 const editForm = document.getElementById('editForm');
 const cancelarEdicion = document.getElementById('cancelarEdicion');
+const buscadorApto = document.getElementById('buscadorApto');
 
 let editandoId = null;
 let registrosActuales = [];
+
+buscadorApto.addEventListener('input', () => renderTabla(registrosActuales));
 
 function safeCell(v) {
     if (typeof v !== 'string') return v;
@@ -33,7 +36,7 @@ document.getElementById('btnDescargar').addEventListener('click', () => {
         alert('No hay registros para descargar.');
         return;
     }
-    const filas = registrosActuales.map(p => ({
+    const filas = registrosActuales.map(({ data: p }) => ({
         'Nombre':        safeCell([p.nombre, p.apellido].filter(Boolean).join(' ')),
         'Edad':          p.edad ?? '',
         'Apartamento':   safeCell(p.apartamento ?? ''),
@@ -117,34 +120,30 @@ function cerrarModal() {
     editForm.reset();
 }
 
-onSnapshot(usuariosColeccion, (snapshot) => {
+function renderTabla(docs) {
+    const filtro = buscadorApto.value.trim().toLowerCase();
     tabla.innerHTML = '';
-    registrosActuales = [];
-    snapshot.forEach((documento) => {
-        const persona = documento.data();
-        registrosActuales.push(persona);
+    docs.forEach(({ id, data: persona }) => {
+        if (filtro && !(persona.apartamento ?? '').toLowerCase().includes(filtro)) return;
+
         const fila = document.createElement('tr');
         fila.className = 'hover:bg-gray-50';
 
-        // Nombre (compatibilidad con registros viejos que tienen apellido separado)
         const tdNombre = document.createElement('td');
         tdNombre.className = 'px-4 py-3 text-gray-800 font-medium';
         tdNombre.textContent = [persona.nombre, persona.apellido].filter(Boolean).join(' ');
         fila.appendChild(tdNombre);
 
-        // Edad (oculta en móvil)
         const tdEdad = document.createElement('td');
         tdEdad.className = 'px-4 py-3 text-gray-600 hidden sm:table-cell';
         tdEdad.textContent = persona.edad ?? '—';
         fila.appendChild(tdEdad);
 
-        // Apartamento (oculto en móvil)
         const tdApto = document.createElement('td');
         tdApto.className = 'px-4 py-3 text-gray-600 hidden sm:table-cell';
         tdApto.textContent = persona.apartamento ?? '';
         fila.appendChild(tdApto);
 
-        // Badge de estado
         const tdStatus = document.createElement('td');
         tdStatus.className = 'px-4 py-3';
         const badge = document.createElement('span');
@@ -154,16 +153,20 @@ onSnapshot(usuariosColeccion, (snapshot) => {
         tdStatus.appendChild(badge);
         fila.appendChild(tdStatus);
 
-        // Botón editar
         const tdAcciones = document.createElement('td');
         tdAcciones.className = 'px-4 py-3';
         const btnEditar = document.createElement('button');
         btnEditar.textContent = 'Editar';
         btnEditar.className = 'bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors';
-        btnEditar.addEventListener('click', () => abrirModal(documento.id, persona));
+        btnEditar.addEventListener('click', () => abrirModal(id, persona));
         tdAcciones.appendChild(btnEditar);
         fila.appendChild(tdAcciones);
 
         tabla.appendChild(fila);
     });
+}
+
+onSnapshot(usuariosColeccion, (snapshot) => {
+    registrosActuales = snapshot.docs.map(d => ({ id: d.id, data: d.data() }));
+    renderTabla(registrosActuales);
 });
