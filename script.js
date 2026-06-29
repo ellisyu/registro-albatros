@@ -58,12 +58,11 @@ onSnapshot(usuariosColeccion, (snapshot) => {
         const persona = doc.data();
         
         const fila = document.createElement('tr');
-        fila.innerHTML = `
-            <td>${persona.nombre}</td>
-            <td>${persona.apellido}</td>
-            <td>${persona.edad}</td>
-            <td>${persona.apartamento}</td>
-        `;
+        for (const v of [persona.nombre, persona.apellido, persona.edad, persona.apartamento]) {
+            const td = document.createElement('td');
+            td.textContent = v ?? '';
+            fila.appendChild(td);
+        }
         tabla.appendChild(fila);
     });
 });
