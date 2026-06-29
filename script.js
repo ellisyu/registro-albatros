@@ -23,17 +23,22 @@ const cancelarEdicion = document.getElementById('cancelarEdicion');
 let editandoId = null;
 let registrosActuales = [];
 
+function safeCell(v) {
+    if (typeof v !== 'string') return v;
+    return /^[=+\-@\t\r]/.test(v) ? "'" + v : v;
+}
+
 document.getElementById('btnDescargar').addEventListener('click', () => {
     if (registrosActuales.length === 0) {
         alert('No hay registros para descargar.');
         return;
     }
     const filas = registrosActuales.map(p => ({
-        'Nombre':        [p.nombre, p.apellido].filter(Boolean).join(' '),
+        'Nombre':        safeCell([p.nombre, p.apellido].filter(Boolean).join(' ')),
         'Edad':          p.edad ?? '',
-        'Apartamento':   p.apartamento ?? '',
-        'Estado':        p.status ?? '',
-        'Observaciones': p.observaciones ?? '',
+        'Apartamento':   safeCell(p.apartamento ?? ''),
+        'Estado':        safeCell(p.status ?? ''),
+        'Observaciones': safeCell(p.observaciones ?? ''),
         'Fecha Registro': p.fechaRegistro?.toDate
             ? p.fechaRegistro.toDate().toLocaleDateString('es-VE')
             : '',
