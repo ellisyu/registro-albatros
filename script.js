@@ -127,14 +127,31 @@ function cerrarModal() {
 function renderTabla(docs) {
     const filtro = buscadorApto.value.trim().toLowerCase();
     tabla.innerHTML = '';
-    docs.forEach(({ id, data: persona }) => {
-        if (filtro && !(persona.apartamento ?? '').toLowerCase().includes(filtro)) return;
 
+    const filtrados = docs.filter(({ data: p }) =>
+        !filtro || (p.apartamento ?? '').toLowerCase().includes(filtro)
+    );
+
+    filtrados.sort((a, b) => {
+        const aptoA = (a.data.apartamento ?? '').toString();
+        const aptoB = (b.data.apartamento ?? '').toString();
+        const numA = parseFloat(aptoA);
+        const numB = parseFloat(aptoB);
+        if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+        return aptoA.localeCompare(aptoB);
+    });
+
+    filtrados.forEach(({ id, data: persona }) => {
         const fila = document.createElement('tr');
         fila.className = 'hover:bg-gray-50';
 
+        const tdApto = document.createElement('td');
+        tdApto.className = 'px-4 py-3 text-gray-800 font-semibold';
+        tdApto.textContent = persona.apartamento ?? '';
+        fila.appendChild(tdApto);
+
         const tdNombre = document.createElement('td');
-        tdNombre.className = 'px-4 py-3 text-gray-800 font-medium';
+        tdNombre.className = 'px-4 py-3 text-gray-800';
         tdNombre.textContent = [persona.nombre, persona.apellido].filter(Boolean).join(' ');
         fila.appendChild(tdNombre);
 
@@ -142,11 +159,6 @@ function renderTabla(docs) {
         tdEdad.className = 'px-4 py-3 text-gray-600 hidden sm:table-cell';
         tdEdad.textContent = persona.edad ?? '—';
         fila.appendChild(tdEdad);
-
-        const tdApto = document.createElement('td');
-        tdApto.className = 'px-4 py-3 text-gray-600 hidden sm:table-cell';
-        tdApto.textContent = persona.apartamento ?? '';
-        fila.appendChild(tdApto);
 
         const tdTel = document.createElement('td');
         tdTel.className = 'px-4 py-3 text-gray-600 hidden sm:table-cell';
