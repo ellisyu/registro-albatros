@@ -12,11 +12,9 @@
         <h2 class="text-2xl font-bold text-gray-800 mb-6">Registro de Residentes</h2>
 
         <form id="registroForm" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
-            <input type="text" id="nombre" placeholder="Nombres" required
-                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 col-span-1">
-            <input type="text" id="apellido" placeholder="Apellidos" required
-                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 col-span-1">
-            <input type="number" id="edad" placeholder="Edad" required
+            <input type="text" id="nombre" placeholder="Nombre completo" required
+                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 col-span-1 sm:col-span-2">
+            <input type="number" id="edad" placeholder="Edad (opcional)"
                 class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 col-span-1">
             <input type="text" id="apartamento" placeholder="N° de Apartamento" required
                 class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 col-span-1">
@@ -27,6 +25,8 @@
                 <option value="DESAPARECIDA">DESAPARECIDA</option>
                 <option value="FALLECIDA">FALLECIDA</option>
             </select>
+            <textarea id="observaciones" placeholder="Observaciones (opcional)" rows="3"
+                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 col-span-1 sm:col-span-2 resize-none"></textarea>
             <button type="submit"
                 class="col-span-1 sm:col-span-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
                 Registrar Persona
@@ -40,7 +40,6 @@
                 <thead class="bg-gray-50 text-gray-600 uppercase text-xs">
                     <tr>
                         <th class="px-4 py-3">Nombre</th>
-                        <th class="px-4 py-3">Apellido</th>
                         <th class="px-4 py-3 hidden sm:table-cell">Edad</th>
                         <th class="px-4 py-3 hidden sm:table-cell">Apartamento</th>
                         <th class="px-4 py-3">Estado</th>
@@ -57,11 +56,9 @@
         <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
             <h3 class="text-lg font-bold text-gray-800 mb-4">Editar Persona</h3>
             <form id="editForm" class="space-y-3">
-                <input type="text" id="editNombre" placeholder="Nombres" required
+                <input type="text" id="editNombre" placeholder="Nombre completo" required
                     class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                <input type="text" id="editApellido" placeholder="Apellidos" required
-                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                <input type="number" id="editEdad" placeholder="Edad" required
+                <input type="number" id="editEdad" placeholder="Edad (opcional)"
                     class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <input type="text" id="editApartamento" placeholder="N° de Apartamento" required
                     class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -71,6 +68,8 @@
                     <option value="DESAPARECIDA">DESAPARECIDA</option>
                     <option value="FALLECIDA">FALLECIDA</option>
                 </select>
+                <textarea id="editObservaciones" placeholder="Observaciones (opcional)" rows="3"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"></textarea>
                 <div class="flex gap-3 pt-2">
                     <button type="submit"
                         class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg transition-colors">

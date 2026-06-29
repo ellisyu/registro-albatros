@@ -23,20 +23,21 @@ const cancelarEdicion = document.getElementById('cancelarEdicion');
 let editandoId = null;
 
 const statusClasses = {
-    'CON VIDA':    'bg-green-100 text-green-800',
+    'CON VIDA':     'bg-green-100 text-green-800',
     'DESAPARECIDA': 'bg-yellow-100 text-yellow-800',
-    'FALLECIDA':   'bg-red-100 text-red-800',
+    'FALLECIDA':    'bg-red-100 text-red-800',
 };
 
 form.addEventListener('submit', async function(e) {
     e.preventDefault();
+    const edadVal = document.getElementById('edad').value;
     try {
         await addDoc(usuariosColeccion, {
             nombre: document.getElementById('nombre').value,
-            apellido: document.getElementById('apellido').value,
-            edad: Number(document.getElementById('edad').value),
+            edad: edadVal ? Number(edadVal) : null,
             apartamento: document.getElementById('apartamento').value,
             status: document.getElementById('status').value,
+            observaciones: document.getElementById('observaciones').value || '',
             fechaRegistro: new Date()
         });
         form.reset();
@@ -50,13 +51,14 @@ form.addEventListener('submit', async function(e) {
 editForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     if (!editandoId) return;
+    const edadVal = document.getElementById('editEdad').value;
     try {
         await updateDoc(doc(db, "residentes", editandoId), {
             nombre: document.getElementById('editNombre').value,
-            apellido: document.getElementById('editApellido').value,
-            edad: Number(document.getElementById('editEdad').value),
+            edad: edadVal ? Number(edadVal) : null,
             apartamento: document.getElementById('editApartamento').value,
             status: document.getElementById('editStatus').value,
+            observaciones: document.getElementById('editObservaciones').value || '',
         });
         cerrarModal();
     } catch (error) {
@@ -72,11 +74,13 @@ modalOverlay.addEventListener('click', function(e) {
 
 function abrirModal(id, persona) {
     editandoId = id;
-    document.getElementById('editNombre').value = persona.nombre ?? '';
-    document.getElementById('editApellido').value = persona.apellido ?? '';
+    // Compatibilidad con registros viejos que tienen nombre + apellido separados
+    const nombreCompleto = [persona.nombre, persona.apellido].filter(Boolean).join(' ');
+    document.getElementById('editNombre').value = nombreCompleto;
     document.getElementById('editEdad').value = persona.edad ?? '';
     document.getElementById('editApartamento').value = persona.apartamento ?? '';
     document.getElementById('editStatus').value = persona.status ?? 'CON VIDA';
+    document.getElementById('editObservaciones').value = persona.observaciones ?? '';
     modalOverlay.classList.remove('hidden');
 }
 
@@ -93,21 +97,23 @@ onSnapshot(usuariosColeccion, (snapshot) => {
         const fila = document.createElement('tr');
         fila.className = 'hover:bg-gray-50';
 
-        // Nombre, Apellido (siempre visibles)
-        for (const v of [persona.nombre, persona.apellido]) {
-            const td = document.createElement('td');
-            td.className = 'px-4 py-3 text-gray-800';
-            td.textContent = v ?? '';
-            fila.appendChild(td);
-        }
+        // Nombre (compatibilidad con registros viejos que tienen apellido separado)
+        const tdNombre = document.createElement('td');
+        tdNombre.className = 'px-4 py-3 text-gray-800 font-medium';
+        tdNombre.textContent = [persona.nombre, persona.apellido].filter(Boolean).join(' ');
+        fila.appendChild(tdNombre);
 
-        // Edad, Apartamento (ocultos en móvil)
-        for (const v of [persona.edad, persona.apartamento]) {
-            const td = document.createElement('td');
-            td.className = 'px-4 py-3 text-gray-600 hidden sm:table-cell';
-            td.textContent = v ?? '';
-            fila.appendChild(td);
-        }
+        // Edad (oculta en móvil)
+        const tdEdad = document.createElement('td');
+        tdEdad.className = 'px-4 py-3 text-gray-600 hidden sm:table-cell';
+        tdEdad.textContent = persona.edad ?? '—';
+        fila.appendChild(tdEdad);
+
+        // Apartamento (oculto en móvil)
+        const tdApto = document.createElement('td');
+        tdApto.className = 'px-4 py-3 text-gray-600 hidden sm:table-cell';
+        tdApto.textContent = persona.apartamento ?? '';
+        fila.appendChild(tdApto);
 
         // Badge de estado
         const tdStatus = document.createElement('td');
