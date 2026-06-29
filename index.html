@@ -28,6 +28,8 @@
                 <option value="DESAPARECIDA">DESAPARECIDA</option>
                 <option value="FALLECIDA">FALLECIDA</option>
             </select>
+            <input type="tel" id="telefono" placeholder="Teléfono (opcional)"
+                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 col-span-1 sm:col-span-2">
             <textarea id="observaciones" placeholder="Observaciones (opcional)" rows="3"
                 class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 col-span-1 sm:col-span-2 resize-none"></textarea>
             <button type="submit"
@@ -56,6 +58,7 @@
                         <th class="px-4 py-3">Nombre</th>
                         <th class="px-4 py-3 hidden sm:table-cell">Edad</th>
                         <th class="px-4 py-3 hidden sm:table-cell">Apartamento</th>
+                        <th class="px-4 py-3 hidden sm:table-cell">Teléfono</th>
                         <th class="px-4 py-3">Estado</th>
                         <th class="px-4 py-3">Acciones</th>
                     </tr>
@@ -82,6 +85,8 @@
                     <option value="DESAPARECIDA">DESAPARECIDA</option>
                     <option value="FALLECIDA">FALLECIDA</option>
                 </select>
+                <input type="tel" id="editTelefono" placeholder="Teléfono (opcional)"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
                 <textarea id="editObservaciones" placeholder="Observaciones (opcional)" rows="3"
                     class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"></textarea>
                 <div class="flex gap-3 pt-2">

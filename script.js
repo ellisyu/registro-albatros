@@ -41,6 +41,7 @@ document.getElementById('btnDescargar').addEventListener('click', () => {
         'Edad':          p.edad ?? '',
         'Apartamento':   safeCell(p.apartamento ?? ''),
         'Estado':        safeCell(p.status ?? ''),
+        'Teléfono':      safeCell(p.telefono ?? ''),
         'Observaciones': safeCell(p.observaciones ?? ''),
         'Fecha Registro': p.fechaRegistro?.toDate
             ? p.fechaRegistro.toDate().toLocaleDateString('es-VE')
@@ -67,6 +68,7 @@ form.addEventListener('submit', async function(e) {
             edad: edadVal ? Number(edadVal) : null,
             apartamento: document.getElementById('apartamento').value,
             status: document.getElementById('status').value,
+            telefono: document.getElementById('telefono').value || '',
             observaciones: document.getElementById('observaciones').value || '',
             fechaRegistro: new Date()
         });
@@ -88,6 +90,7 @@ editForm.addEventListener('submit', async function(e) {
             edad: edadVal ? Number(edadVal) : null,
             apartamento: document.getElementById('editApartamento').value,
             status: document.getElementById('editStatus').value,
+            telefono: document.getElementById('editTelefono').value || '',
             observaciones: document.getElementById('editObservaciones').value || '',
         });
         cerrarModal();
@@ -110,6 +113,7 @@ function abrirModal(id, persona) {
     document.getElementById('editEdad').value = persona.edad ?? '';
     document.getElementById('editApartamento').value = persona.apartamento ?? '';
     document.getElementById('editStatus').value = persona.status ?? 'CON VIDA';
+    document.getElementById('editTelefono').value = persona.telefono ?? '';
     document.getElementById('editObservaciones').value = persona.observaciones ?? '';
     modalOverlay.classList.remove('hidden');
 }
@@ -143,6 +147,11 @@ function renderTabla(docs) {
         tdApto.className = 'px-4 py-3 text-gray-600 hidden sm:table-cell';
         tdApto.textContent = persona.apartamento ?? '';
         fila.appendChild(tdApto);
+
+        const tdTel = document.createElement('td');
+        tdTel.className = 'px-4 py-3 text-gray-600 hidden sm:table-cell';
+        tdTel.textContent = persona.telefono ?? '—';
+        fila.appendChild(tdTel);
 
         const tdStatus = document.createElement('td');
         tdStatus.className = 'px-4 py-3';
