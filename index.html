@@ -3,61 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Residentes (Firebase)</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Registro de Residentes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-100 min-h-screen p-4 sm:p-8">
 
-    <div class="container">
-        <h2>Registro de Residentes (Base de Datos)</h2>
+    <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-5 sm:p-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Registro de Residentes</h2>
 
-        <form id="registroForm">
-            <input type="text" id="nombre" placeholder="Nombres" required>
-            <input type="text" id="apellido" placeholder="Apellidos" required>
-            <input type="number" id="edad" placeholder="Edad" required>
-            <input type="text" id="apartamento" placeholder="N° de Apartamento" required>
-            <select id="status" required>
+        <form id="registroForm" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+            <input type="text" id="nombre" placeholder="Nombres" required
+                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 col-span-1">
+            <input type="text" id="apellido" placeholder="Apellidos" required
+                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 col-span-1">
+            <input type="number" id="edad" placeholder="Edad" required
+                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 col-span-1">
+            <input type="text" id="apartamento" placeholder="N° de Apartamento" required
+                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 col-span-1">
+            <select id="status" required
+                class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 col-span-1 sm:col-span-2 text-gray-600">
                 <option value="" disabled selected>Estado</option>
                 <option value="CON VIDA">CON VIDA</option>
                 <option value="DESAPARECIDA">DESAPARECIDA</option>
                 <option value="FALLECIDA">FALLECIDA</option>
             </select>
-            <button type="submit">Registrar Persona</button>
+            <button type="submit"
+                class="col-span-1 sm:col-span-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                Registrar Persona
+            </button>
         </form>
 
-        <h3>Personas Registradas</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Edad</th>
-                    <th>Apartamento</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tablaPersonas"></tbody>
-        </table>
+        <h3 class="text-lg font-semibold text-gray-700 mb-3">Personas Registradas</h3>
+
+        <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-gray-50 text-gray-600 uppercase text-xs">
+                    <tr>
+                        <th class="px-4 py-3">Nombre</th>
+                        <th class="px-4 py-3">Apellido</th>
+                        <th class="px-4 py-3 hidden sm:table-cell">Edad</th>
+                        <th class="px-4 py-3 hidden sm:table-cell">Apartamento</th>
+                        <th class="px-4 py-3">Estado</th>
+                        <th class="px-4 py-3">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaPersonas" class="divide-y divide-gray-100"></tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Modal de edición -->
-    <div id="modalOverlay" class="modal-overlay hidden">
-        <div class="modal">
-            <h3>Editar Persona</h3>
-            <form id="editForm">
-                <input type="text" id="editNombre" placeholder="Nombres" required>
-                <input type="text" id="editApellido" placeholder="Apellidos" required>
-                <input type="number" id="editEdad" placeholder="Edad" required>
-                <input type="text" id="editApartamento" placeholder="N° de Apartamento" required>
-                <select id="editStatus" required>
+    <div id="modalOverlay" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4 hidden">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Editar Persona</h3>
+            <form id="editForm" class="space-y-3">
+                <input type="text" id="editNombre" placeholder="Nombres" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <input type="text" id="editApellido" placeholder="Apellidos" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <input type="number" id="editEdad" placeholder="Edad" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <input type="text" id="editApartamento" placeholder="N° de Apartamento" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                <select id="editStatus" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
                     <option value="CON VIDA">CON VIDA</option>
                     <option value="DESAPARECIDA">DESAPARECIDA</option>
                     <option value="FALLECIDA">FALLECIDA</option>
                 </select>
-                <div class="modal-buttons">
-                    <button type="submit">Guardar</button>
-                    <button type="button" id="cancelarEdicion">Cancelar</button>
+                <div class="flex gap-3 pt-2">
+                    <button type="submit"
+                        class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg transition-colors">
+                        Guardar
+                    </button>
+                    <button type="button" id="cancelarEdicion"
+                        class="flex-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 rounded-lg transition-colors">
+                        Cancelar
+                    </button>
                 </div>
             </form>
         </div>

@@ -22,7 +22,12 @@ const cancelarEdicion = document.getElementById('cancelarEdicion');
 
 let editandoId = null;
 
-// Registrar persona
+const statusClasses = {
+    'CON VIDA':    'bg-green-100 text-green-800',
+    'DESAPARECIDA': 'bg-yellow-100 text-yellow-800',
+    'FALLECIDA':   'bg-red-100 text-red-800',
+};
+
 form.addEventListener('submit', async function(e) {
     e.preventDefault();
     try {
@@ -42,7 +47,6 @@ form.addEventListener('submit', async function(e) {
     }
 });
 
-// Guardar edición
 editForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     if (!editandoId) return;
@@ -82,32 +86,45 @@ function cerrarModal() {
     editForm.reset();
 }
 
-// Escuchar cambios en tiempo real
 onSnapshot(usuariosColeccion, (snapshot) => {
     tabla.innerHTML = '';
     snapshot.forEach((documento) => {
         const persona = documento.data();
         const fila = document.createElement('tr');
+        fila.className = 'hover:bg-gray-50';
 
-        for (const v of [persona.nombre, persona.apellido, persona.edad, persona.apartamento]) {
+        // Nombre, Apellido (siempre visibles)
+        for (const v of [persona.nombre, persona.apellido]) {
             const td = document.createElement('td');
+            td.className = 'px-4 py-3 text-gray-800';
             td.textContent = v ?? '';
             fila.appendChild(td);
         }
 
-        // Celda de estado con badge de color
+        // Edad, Apartamento (ocultos en móvil)
+        for (const v of [persona.edad, persona.apartamento]) {
+            const td = document.createElement('td');
+            td.className = 'px-4 py-3 text-gray-600 hidden sm:table-cell';
+            td.textContent = v ?? '';
+            fila.appendChild(td);
+        }
+
+        // Badge de estado
         const tdStatus = document.createElement('td');
+        tdStatus.className = 'px-4 py-3';
         const badge = document.createElement('span');
-        badge.textContent = persona.status ?? 'CON VIDA';
-        badge.className = 'badge badge-' + (persona.status ?? 'CON VIDA').replace(' ', '-');
+        const status = persona.status ?? 'CON VIDA';
+        badge.textContent = status;
+        badge.className = `inline-block text-xs font-semibold px-2 py-1 rounded-full ${statusClasses[status] ?? 'bg-gray-100 text-gray-700'}`;
         tdStatus.appendChild(badge);
         fila.appendChild(tdStatus);
 
         // Botón editar
         const tdAcciones = document.createElement('td');
+        tdAcciones.className = 'px-4 py-3';
         const btnEditar = document.createElement('button');
         btnEditar.textContent = 'Editar';
-        btnEditar.className = 'btn-editar';
+        btnEditar.className = 'bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors';
         btnEditar.addEventListener('click', () => abrirModal(documento.id, persona));
         tdAcciones.appendChild(btnEditar);
         fila.appendChild(tdAcciones);
