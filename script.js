@@ -21,6 +21,28 @@ const editForm = document.getElementById('editForm');
 const cancelarEdicion = document.getElementById('cancelarEdicion');
 
 let editandoId = null;
+let registrosActuales = [];
+
+document.getElementById('btnDescargar').addEventListener('click', () => {
+    if (registrosActuales.length === 0) {
+        alert('No hay registros para descargar.');
+        return;
+    }
+    const filas = registrosActuales.map(p => ({
+        'Nombre':        [p.nombre, p.apellido].filter(Boolean).join(' '),
+        'Edad':          p.edad ?? '',
+        'Apartamento':   p.apartamento ?? '',
+        'Estado':        p.status ?? '',
+        'Observaciones': p.observaciones ?? '',
+        'Fecha Registro': p.fechaRegistro?.toDate
+            ? p.fechaRegistro.toDate().toLocaleDateString('es-VE')
+            : '',
+    }));
+    const hoja = XLSX.utils.json_to_sheet(filas);
+    const libro = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(libro, hoja, 'Residentes');
+    XLSX.writeFile(libro, 'residentes.xlsx');
+});
 
 const statusClasses = {
     'CON VIDA':     'bg-green-100 text-green-800',
@@ -92,8 +114,10 @@ function cerrarModal() {
 
 onSnapshot(usuariosColeccion, (snapshot) => {
     tabla.innerHTML = '';
+    registrosActuales = [];
     snapshot.forEach((documento) => {
         const persona = documento.data();
+        registrosActuales.push(persona);
         const fila = document.createElement('tr');
         fila.className = 'hover:bg-gray-50';
 

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Residentes</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen p-4 sm:p-8">
 
@@ -33,7 +34,13 @@
             </button>
         </form>
 
-        <h3 class="text-lg font-semibold text-gray-700 mb-3">Personas Registradas</h3>
+        <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-semibold text-gray-700">Personas Registradas</h3>
+            <button id="btnDescargar"
+                class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                &#8595; Descargar Excel
+            </button>
+        </div>
 
         <div class="overflow-x-auto rounded-lg border border-gray-200">
             <table class="w-full text-sm text-left">
