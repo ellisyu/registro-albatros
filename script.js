@@ -187,7 +187,19 @@ function renderTabla(docs) {
     });
 }
 
+function actualizarContadores(docs) {
+    const conteo = { 'CON VIDA': 0, 'DESAPARECIDA': 0, 'FALLECIDA': 0 };
+    docs.forEach(({ data: p }) => {
+        const s = p.status ?? 'CON VIDA';
+        if (s in conteo) conteo[s]++;
+    });
+    document.getElementById('cntVida').textContent = conteo['CON VIDA'];
+    document.getElementById('cntDesaparecida').textContent = conteo['DESAPARECIDA'];
+    document.getElementById('cntFallecida').textContent = conteo['FALLECIDA'];
+}
+
 onSnapshot(usuariosColeccion, (snapshot) => {
     registrosActuales = snapshot.docs.map(d => ({ id: d.id, data: d.data() }));
+    actualizarContadores(registrosActuales);
     renderTabla(registrosActuales);
 });
